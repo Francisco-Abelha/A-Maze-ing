@@ -72,24 +72,37 @@ def parser() -> None:
 
     config: dict = {}
 
-    with open(sys.argv[1], "r") as file:
-        for line in file:
-            line = line.strip()
+    try:
+        with open(sys.argv[1], "r") as file:
+            for line in file:
+                line = line.strip()
 
-            if not line or line.startswith("#"):
-                continue
+                if not line or line.startswith("#"):
+                    continue
 
-            if "=" not in line:
-                raise ValueError("Invalid line format")
+                if "=" not in line:
+                    raise ValueError("Invalid line format")
 
-            key, value = line.split("=", 1)
+                key, value = line.split("=", 1)
 
-            if key not in VALIDATORS:
-                raise ValueError(f"Unknown key: {key}")
+                if key not in VALIDATORS:
+                    raise ValueError(f"Unknown key: {key}")
 
-            config[key] = VALIDATORS[key](value)
+                if key in config:
+                    raise ValueError(f"Duplicate key: '{key}'")
+
+                config[key] = VALIDATORS[key](value)
+    except FileNotFoundError:
+        raise ValueError(f"File '{sys.argv[1]}' not found")
 
     missing_keys = REQUIRED_KEYS - config.keys()
 
     if missing_keys:
         raise ValueError(f"Missing keys: {missing_keys}")
+
+
+# try:
+#     parser()
+# except ValueError as error:
+#     print(f"Error: {error}")
+#     sys.exit(1)
