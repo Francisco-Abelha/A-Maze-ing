@@ -86,6 +86,21 @@ class MazeGenerator:
                 print("1" if cell.visited else "0", end=" ")
             print()
 
+    def print_walls(self) -> None:
+        for y in range(self.height):
+            for x in range(self.width):
+                cell = self.get_cell(x, y)
+                print(
+                    f"({x},{y}) "
+                    f"N:{cell.north} "
+                    f"E:{cell.east} "
+                    f"S:{cell.south} "
+                    f"W:{cell.west}"
+                )
+
+    # def solve(self) -> list[str]:
+    #     pass
+
 
 if __name__ == "__main__":
     maze = MazeGenerator(
@@ -95,3 +110,4 @@ if __name__ == "__main__":
     visited_count = 0
 
     maze.print_visited()
+    maze.print_walls()
