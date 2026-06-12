@@ -1,4 +1,5 @@
 from cell import Cell
+from collections import deque
 import random
 
 
@@ -31,7 +32,9 @@ class MazeGenerator:
     def get_cell(self, x: int, y: int) -> Cell:
         return self.grid[y][x]
 
-    def remove_wall(self, current_x, current_y, next_x, next_y) -> None:
+    def remove_wall(
+        self, current_x: int, current_y: int, next_x: int, next_y: int
+    ) -> None:
         if next_x > current_x:
             self.get_cell(current_x, current_y).east = False
             self.get_cell(next_x, next_y).west = False
@@ -81,12 +84,14 @@ class MazeGenerator:
                 stack.pop()
 
     def print_visited(self) -> None:
+        print("\n------------ VISITED WALLS ------------")
         for row in self.grid:
             for cell in row:
                 print("1" if cell.visited else "0", end=" ")
             print()
 
     def print_walls(self) -> None:
+        print("\n------------ WALLS ------------")
         for y in range(self.height):
             for x in range(self.width):
                 cell = self.get_cell(x, y)
@@ -98,8 +103,57 @@ class MazeGenerator:
                     f"W:{cell.west}"
                 )
 
-    # def solve(self) -> list[str]:
-    #     pass
+    def get_accessible_neighbors(
+        self,
+        x: int,
+        y: int,
+    ) -> list[tuple[int, int]]:
+        neighbors = []
+        cell = self.get_cell(x, y)
+
+        if not cell.north:
+            neighbors.append((x, y - 1))
+
+        if not cell.south:
+            neighbors.append((x, y + 1))
+
+        if not cell.east:
+            neighbors.append((x + 1, y))
+
+        if not cell.west:
+            neighbors.append((x - 1, y))
+
+        return neighbors
+
+    def solve(self) -> list[tuple[int, int]]:
+        queue = deque([self.entry])
+
+        visited = {self.entry}
+        parents: dict = {self.entry: None}
+
+        while queue:
+            current = queue.popleft()
+            if current == self.exit:
+                break
+
+            neighbors = self.get_accessible_neighbors(current[0], current[1])
+
+            for neighbor in neighbors:
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    parents[neighbor] = current
+                    queue.append(neighbor)
+
+        path = []
+        current = self.exit
+
+        while current is not None:
+            path.append(current)
+            current = parents[current]
+
+        path.reverse()
+
+        return path
 
 
 if __name__ == "__main__":
@@ -107,7 +161,10 @@ if __name__ == "__main__":
         width=15, height=20, entry=(0, 0), exit=(14, 19), perfect=True
     )
     maze.generate()
-    visited_count = 0
 
     maze.print_visited()
     maze.print_walls()
+
+    path = maze.solve()
+    print("\nPath:", path)
+    print("\nLength:", len(path))
