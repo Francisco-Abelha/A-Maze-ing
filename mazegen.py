@@ -1,5 +1,6 @@
 import random
 from dataclasses import dataclass
+from collections import deque
 
 
 @dataclass
@@ -89,6 +90,73 @@ class MazeGenerator:
 
             else:
                 stack.pop()
+
+    def get_accessible_neighbors(
+            self,
+            x: int,
+            y: int,
+    ) -> list[tuple[int, int]]:
+        neighbors = []
+        cell = self.get_cell(x, y)
+
+        if not cell.north:
+            neighbors.append((x, y - 1))
+
+        if not cell.south:
+            neighbors.append((x, y + 1))
+
+        if not cell.east:
+            neighbors.append((x + 1, y))
+
+        if not cell.west:
+            neighbors.append((x - 1, y))
+
+        return neighbors
+
+    def solve(self) -> list[str]:
+        queue = deque([self.entry])
+
+        visited = {self.entry}
+        parents: dict = {self.entry: None}
+
+        while queue:
+            current = queue.popleft()
+            if current == self.exit:
+                break
+
+            neighbors = self.get_accessible_neighbors(current[0], current[1])
+
+            for neighbor in neighbors:
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    parents[neighbor] = current
+                    queue.append(neighbor)
+
+        path = []
+        current = self.exit
+
+        while current is not None:
+            path.append(current)
+            current = parents[current]
+
+        path.reverse()
+        new_path: list[str] = []
+
+        x = 1
+        while x < len(path):
+            cell = path[x - 1]
+            next = path[x]
+            if cell[0] < next[0]:
+                new_path.append("E")
+            if cell[0] > next[0]:
+                new_path.append("W")
+            if cell[1] < next[1]:
+                new_path.append("S")
+            if cell[1] > next[1]:
+                new_path.append("N")
+            x += 1
+
+        return new_path
 
     def print_visited(self) -> None:
         for row in self.grid:

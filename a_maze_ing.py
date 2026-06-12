@@ -19,6 +19,7 @@ def main() -> None:
 
         maze.generate()
         maze.dump()
+        print("".join(maze.solve()))
     except ValueError as e:
         print(f"Error: {e}")
         sys.exit(1)
