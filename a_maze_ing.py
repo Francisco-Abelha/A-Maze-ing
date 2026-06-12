@@ -1,0 +1,2 @@
+from mazegen import MazeGenerator
+
