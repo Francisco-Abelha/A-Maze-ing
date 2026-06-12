@@ -125,7 +125,7 @@ class MazeGenerator:
 
         return neighbors
 
-    def solve(self) -> list[tuple[str]]:
+    def solve(self) -> list[str]:
         queue = deque([self.entry])
 
         visited = {self.entry}
@@ -183,4 +183,7 @@ if __name__ == "__main__":
     path = maze.solve()
 
     print("\nPath:", path)
+    string = ""
+    new = string.join(path)
+    print("\nMoves:", new)
     print("\nLength:", len(path))
