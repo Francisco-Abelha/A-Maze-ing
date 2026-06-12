@@ -11,13 +11,18 @@ def main() -> None:
         maze_entry = config["ENTRY"]
         maze_exit = config["EXIT"]
         perfect = config["PERFECT"]
+        seed = config.get("SEED")
 
-        maze = MazeGenerator(width, height, maze_entry, maze_exit, perfect)
+        maze = MazeGenerator(
+            width, height, maze_entry, maze_exit, perfect, seed=seed
+        )
+
         maze.generate()
         maze.dump()
     except ValueError as e:
         print(f"Error: {e}")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

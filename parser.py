@@ -46,6 +46,14 @@ def validate_output_file(value: str) -> str:
     return value
 
 
+def validate_seed(value: str) -> int:
+    try:
+        seed: int = int(value)
+    except ValueError:
+        raise ValueError("SEED must be an integer")
+    return seed
+
+
 def parser() -> dict:
     args: int = len(sys.argv)
 
@@ -68,6 +76,7 @@ def parser() -> dict:
         "EXIT": validate_coordinates,
         "OUTPUT_FILE": validate_output_file,
         "PERFECT": validate_perfect,
+        "SEED": validate_seed
     }
 
     config: dict = {}

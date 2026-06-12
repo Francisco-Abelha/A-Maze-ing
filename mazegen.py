@@ -26,6 +26,7 @@ class MazeGenerator:
         self.entry = entry
         self.exit = exit
         self.seed = seed
+        self.rng = random.Random(seed)
         self.perfect = perfect
 
         self.grid = []
@@ -81,7 +82,7 @@ class MazeGenerator:
             neighbors = self.get_unvisited_neighbors(current_x, current_y)
 
             if neighbors:
-                next_x, next_y = random.choice(neighbors)
+                next_x, next_y = self.rng.choice(neighbors)
                 self.remove_wall(current_x, current_y, next_x, next_y)
                 self.get_cell(next_x, next_y).visited = True
                 stack.append((next_x, next_y))
