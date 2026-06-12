@@ -83,8 +83,20 @@ class MazeGenerator:
     def print_visited(self) -> None:
         for row in self.grid:
             for cell in row:
-                print("1" if cell.visited else "0", end=" ")
+                print("-" if cell.visited else "*", end=" ")
             print()
+
+    def dump(self):
+        print("+" + "---+" * self.width)
+        for y in range(self.height):
+            line = "|"
+            for x in range(self.width):
+                line += "   " + ("|" if self.get_cell(x, y).east else " ")
+            print(line)
+            floor = "+"
+            for x in range(self.width):
+                floor += ("---" if self.get_cell(x, y).south else "   ") + "+"
+            print(floor)
 
 
 if __name__ == "__main__":
@@ -94,4 +106,4 @@ if __name__ == "__main__":
     maze.generate()
     visited_count = 0
 
-    maze.print_visited()
+    maze.dump()
