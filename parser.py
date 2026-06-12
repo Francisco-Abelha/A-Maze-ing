@@ -46,7 +46,7 @@ def validate_output_file(value: str) -> str:
     return value
 
 
-def parser() -> None:
+def parser() -> dict:
     args: int = len(sys.argv)
 
     if args != 2:
@@ -100,9 +100,4 @@ def parser() -> None:
     if missing_keys:
         raise ValueError(f"Missing keys: {missing_keys}")
 
-
-# try:
-#     parser()
-# except ValueError as error:
-#     print(f"Error: {error}")
-#     sys.exit(1)
+    return config
