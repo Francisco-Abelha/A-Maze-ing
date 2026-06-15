@@ -81,6 +81,7 @@ def run(maze: MazeGenerator) -> None:
             )
             maze.add_42_pattern()
             maze.generate()
+            maze.write_output_file(output_file="maze.txt")
             path_set = build_path_set(maze)
         elif choice == "2":
             show_path = not show_path
