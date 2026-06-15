@@ -1,6 +1,14 @@
 from mazegen import MazeGenerator
 
 
+WALL_COLORS = [
+    "\033[47m  \033[0m",  #white
+    "\033[43m  \033[0m",  #yellow
+    "\033[46m  \033[0m",  #cyan
+    "\033[45m  \033[0m",  #magenta
+]
+
+
 def build_path_set(maze: MazeGenerator) -> set[tuple[int, int]]:
     fill = (2 * maze.entry[0] + 1, 2 * maze.entry[1] + 1)
     path_set = {fill}
@@ -13,10 +21,9 @@ def build_path_set(maze: MazeGenerator) -> set[tuple[int, int]]:
     return path_set
 
 
-def render(maze: MazeGenerator, show_path: bool, path_set: set) -> None:
+def render(maze: MazeGenerator, show_path: bool, path_set: set, wall_color: str) -> None:
     w = 2 * maze.width + 1
     h = 2 * maze.height + 1
-    color_white = "\033[47m  \033[0m"
     color_black = "\033[40m  \033[0m"
     color_pink = "\033[48;2;255;105;180m  \033[0m"
     color_green = "\033[42m  \033[0m"
@@ -35,27 +42,28 @@ def render(maze: MazeGenerator, show_path: bool, path_set: set) -> None:
             elif show_path and (x, y) in path_set:
                 block = color_blue
             elif x % 2 == 0 and y % 2 == 0:
-                block = color_white
+                block = wall_color
             elif x % 2 == 1 and y % 2 == 1:
                 block = color_black
             elif x == 0 or x == w - 1 or y == 0 or y == h - 1:
-                block = color_white
+                block = wall_color
             elif x % 2 == 1:
                 wall = maze.get_cell((x - 1) // 2, y // 2).north
-                block = color_white if wall else color_black
+                block = wall_color if wall else color_black
             else:
                 wall = maze.get_cell(x // 2, (y - 1) // 2).west
-                block = color_white if wall else color_black
+                block = wall_color if wall else color_black
             row += block
         print(row)
 
 
 def run(maze: MazeGenerator) -> None:
     show_path = False
+    color_index = 0
     path_set = build_path_set(maze)
     while True:
         print("\033[2J\033[H", end="")
-        render(maze, show_path, path_set)
+        render(maze, show_path, path_set, WALL_COLORS[color_index])
         print("=== A-Maze-ing ===")
         print(
             "1: Re-generate a new maze\n"
@@ -72,5 +80,7 @@ def run(maze: MazeGenerator) -> None:
             path_set = build_path_set(maze)
         elif choice == "2":
             show_path = not show_path
+        elif choice == "3":
+            color_index = (color_index + 1) % len(WALL_COLORS)
         elif choice == "4":
             break
