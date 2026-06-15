@@ -13,12 +13,14 @@ def main() -> None:
         maze_exit = config["EXIT"]
         perfect = config["PERFECT"]
         seed = config.get("SEED")
+        output_file = config["OUTPUT_FILE"]
 
         maze = MazeGenerator(
             width, height, maze_entry, maze_exit, perfect, seed=seed
         )
         maze.add_42_pattern()
         maze.generate()
+        maze.write_output_file(output_file)
         run(maze)
     except ValueError as e:
         print(f"Error: {e}")
