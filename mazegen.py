@@ -171,18 +171,6 @@ class MazeGenerator:
                 print("-" if cell.visited else "*", end=" ")
             print()
 
-    def dump(self):
-        print("+" + "---+" * self.width)
-        for y in range(self.height):
-            line = "|"
-            for x in range(self.width):
-                line += "   " + ("|" if self.get_cell(x, y).east else " ")
-            print(line)
-            floor = "+"
-            for x in range(self.width):
-                floor += ("---" if self.get_cell(x, y).south else "   ") + "+"
-            print(floor)
-
     def close_cell(self, x: int, y: int) -> None:
         cell = self.get_cell(x, y)
 
@@ -266,12 +254,39 @@ class MazeGenerator:
                     if self.rng.random() < 0.15:
                         self.remove_wall(x, y, nx, ny)
 
+    def cell_to_hex(self, cell: Cell) -> str:
+        value = 0
 
-if __name__ == "__main__":
-    maze = MazeGenerator(
-        width=15, height=20, entry=(0, 0), exit=(14, 19), perfect=True
-    )
-    maze.generate()
-    visited_count = 0
+        if cell.north:
+            value += 1
+        if cell.east:
+            value += 2
+        if cell.south:
+            value += 4
+        if cell.west:
+            value += 8
 
-    maze.dump()
+        return format(value, "X")
+
+    def get_hex_lines(self) -> list[str]:
+        lines = []
+
+        for row in self.grid:
+            line = ""
+            for cell in row:
+                line += self.cell_to_hex(cell)
+            lines.append(line)
+
+        return lines
+
+    def write_output_file(self, output_file: str) -> None:
+        path = "".join(self.solve())
+
+        with open(output_file, "w") as file:
+            for line in self.get_hex_lines():
+                file.write(line + "\n")
+
+            file.write("\n")
+            file.write(f"{self.entry[0]},{self.entry[1]}\n")
+            file.write(f"{self.exit[0]},{self.exit[1]}\n")
+            file.write(path + "\n")
