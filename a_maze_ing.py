@@ -1,4 +1,4 @@
-from mazegen import MazeGenerator
+from mazegen.mazegen import MazeGenerator
 from parser import parser
 from visualiser import run
 import sys

@@ -1,4 +1,4 @@
-from mazegen import MazeGenerator
+from mazegen.mazegen import MazeGenerator
 
 WALL_COLORS = [
     "\033[47m  \033[0m",  # white
