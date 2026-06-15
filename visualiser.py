@@ -76,7 +76,7 @@ def render(
         print(row)
 
 
-def run(maze: MazeGenerator) -> None:
+def run(maze: MazeGenerator, output_file: str) -> None:
     """Run the interactive terminal visualiser.
 
     The visualiser lets the user regenerate the maze, show or hide the
@@ -105,7 +105,7 @@ def run(maze: MazeGenerator) -> None:
             )
             maze.add_42_pattern()
             maze.generate()
-            maze.write_output_file(output_file="maze.txt")
+            maze.write_output_file(output_file)
             path_set = build_path_set(maze)
         elif choice == "2":
             show_path = not show_path

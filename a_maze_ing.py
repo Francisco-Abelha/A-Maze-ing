@@ -27,7 +27,7 @@ def main() -> None:
         maze.add_42_pattern()
         maze.generate()
         maze.write_output_file(output_file)
-        run(maze)
+        run(maze, output_file)
     except ValueError as e:
         print(f"Error: {e}")
         sys.exit(1)
