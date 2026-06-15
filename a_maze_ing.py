@@ -17,7 +17,7 @@ def main() -> None:
         maze = MazeGenerator(
             width, height, maze_entry, maze_exit, perfect, seed=seed
         )
-
+        maze.add_42_pattern()
         maze.generate()
         run(maze)
     except ValueError as e:
