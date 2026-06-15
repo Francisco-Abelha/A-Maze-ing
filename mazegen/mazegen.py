@@ -108,7 +108,9 @@ class MazeGenerator:
         """
         return self.grid[y][x]
 
-    def remove_wall(self, current_x, current_y, next_x, next_y) -> None:
+    def remove_wall(
+        self, current_x: int, current_y: int, next_x: int, next_y: int
+    ) -> None:
         """Remove the wall between two adjacent cells.
 
         Args:
