@@ -1,5 +1,6 @@
 from mazegen import MazeGenerator
 from parser import parser
+from visualiser import visualiser
 import sys
 
 
@@ -19,7 +20,9 @@ def main() -> None:
 
         maze.generate()
         maze.dump()
-        print("".join(maze.solve()))
+        #print("->".join(maze.solve()))
+        visualiser(maze)
+        #print("->".join(maze.solve()))
     except ValueError as e:
         print(f"Error: {e}")
         sys.exit(1)
