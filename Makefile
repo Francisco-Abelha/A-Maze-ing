@@ -13,7 +13,7 @@ install:
 	$(PYTHON) -m pip install flake8 mypy
 
 clean:
-	rm -rf __pycache__ .mypy_cache
+	rm -rf __pycache__ .mypy_cache maze.txt
 
 lint:
 	flake8 .
