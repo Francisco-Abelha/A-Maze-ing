@@ -9,6 +9,14 @@ WALL_COLORS = [
 
 
 def build_path_set(maze: MazeGenerator) -> set[tuple[int, int]]:
+    """Build the set of coordinates used to display the solution path.
+
+    Args:
+        maze: An instance of MazeGenerator.
+
+    Returns:
+        A set of (x, y) tuples representing the solution path in the maze.
+    """
     fill = (2 * maze.entry[0] + 1, 2 * maze.entry[1] + 1)
     path_set = {fill}
     deltas = {"N": (0, -1), "S": (0, 1), "E": (1, 0), "W": (-1, 0)}
@@ -23,6 +31,14 @@ def build_path_set(maze: MazeGenerator) -> set[tuple[int, int]]:
 def render(
     maze: MazeGenerator, show_path: bool, path_set: set, wall_color: str
 ) -> None:
+    """Render the maze in the terminal using ANSI colors.
+
+    Args:
+        maze (MazeGenerator): The maze to render.
+        show_path (bool): Whether to display the solution path.
+        path_set (set): The set of coordinates that form the solution path.
+        wall_color (str): The ANSI color code to use for the maze walls.
+    """
     w = 2 * maze.width + 1
     h = 2 * maze.height + 1
     color_black = "\033[40m  \033[0m"
@@ -61,6 +77,14 @@ def render(
 
 
 def run(maze: MazeGenerator) -> None:
+    """Run the interactive terminal visualiser.
+
+    The visualiser lets the user regenerate the maze, show or hide the
+    shortest path, rotate wall colours, and quit the program.
+
+    Args:
+        maze: Maze instance to display and interact with.
+    """
     show_path = False
     color_index = 0
     path_set = build_path_set(maze)

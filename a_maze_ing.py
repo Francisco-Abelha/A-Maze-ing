@@ -5,6 +5,12 @@ import sys
 
 
 def main() -> None:
+    """Run the A-Maze-ing application.
+
+    The function reads the configuration file, creates the maze, places the
+    42 pattern when possible, generates the maze, writes the output file, and
+    starts the terminal visualiser.
+    """
     try:
         config: dict = parser()
         width = config["WIDTH"]

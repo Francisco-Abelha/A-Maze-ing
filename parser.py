@@ -3,6 +3,17 @@ from typing import Callable, Any
 
 
 def validate_width(value: str) -> int:
+    """Validate the maze width.
+
+    Args:
+        value: Width value read from the configuration file.
+
+    Returns:
+        The validated width as an integer.
+
+    Raises:
+        ValueError: If the width is not greater than zero.
+    """
     width: int = int(value)
 
     if width <= 0:
@@ -12,6 +23,17 @@ def validate_width(value: str) -> int:
 
 
 def validate_height(value: str) -> int:
+    """Validate the maze height.
+
+    Args:
+        value: Height value read from the configuration file.
+
+    Returns:
+        The validated height as an integer.
+
+    Raises:
+        ValueError: If the height is not greater than zero.
+    """
     height: int = int(value)
 
     if height <= 0:
@@ -21,6 +43,17 @@ def validate_height(value: str) -> int:
 
 
 def validate_coordinates(value: str) -> tuple[int, int]:
+    """Validate coordinates in the x,y format.
+
+    Args:
+        value: String containing coordinates in 'x,y' format.
+
+    Returns:
+        A tuple of two integers representing the coordinates.
+
+    Raises:
+        ValueError: If the format is invalid or cannot be converted.
+    """
     coordinates: list[str] = value.split(",")
     if len(coordinates) != 2:
         raise ValueError("Coordinates must be formated in x,y")
@@ -32,6 +65,17 @@ def validate_coordinates(value: str) -> tuple[int, int]:
 
 
 def validate_perfect(value: str) -> bool:
+    """Convert the PERFECT configuration value into a boolean.
+
+    Args:
+        value: String value of the PERFECT key from the configuration.
+
+    Returns:
+        Boolean representation of the value.
+
+    Raises:
+        ValueError: If the value is not 'True' or 'False'.
+    """
     if value == "True":
         return True
     elif value == "False":
@@ -41,12 +85,31 @@ def validate_perfect(value: str) -> bool:
 
 
 def validate_output_file(value: str) -> str:
+    """Validate the output filename.
+
+    Args:
+        value: Output filename from the configuration.
+
+    Returns:
+        The validated filename as a string.
+    """
     if not value:
         raise ValueError("OUTPUT_FILE cannot be empty")
     return value
 
 
 def validate_seed(value: str) -> int:
+    """Validate and convert the seed into an integer.
+
+    Args:
+        value: Seed value from the configuration.
+
+    Returns:
+        The validated seed as an integer.
+
+    Raises:
+        ValueError: If the seed is not an integer.
+    """
     try:
         seed: int = int(value)
     except ValueError:
@@ -55,6 +118,15 @@ def validate_seed(value: str) -> int:
 
 
 def parser() -> dict:
+    """Read and validate the configuration file.
+
+    Returns:
+        A dictionary containing the maze configuration.
+
+    Raises:
+        ValueError: If the configuration file is missing,
+         invalid, or malformed.
+    """
     args: int = len(sys.argv)
 
     if args != 2:
@@ -76,7 +148,7 @@ def parser() -> dict:
         "EXIT": validate_coordinates,
         "OUTPUT_FILE": validate_output_file,
         "PERFECT": validate_perfect,
-        "SEED": validate_seed
+        "SEED": validate_seed,
     }
 
     config: dict = {}
