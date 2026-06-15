@@ -14,6 +14,8 @@ def validate_width(value: str) -> int:
     Raises:
         ValueError: If the width is not greater than zero.
     """
+    if not value:
+        raise ValueError("WIDTH cannot be empty")
     width: int = int(value)
 
     if width <= 0:
@@ -34,6 +36,8 @@ def validate_height(value: str) -> int:
     Raises:
         ValueError: If the height is not greater than zero.
     """
+    if not value:
+        raise ValueError("HEIGHT cannot be empty")
     height: int = int(value)
 
     if height <= 0:
@@ -54,6 +58,8 @@ def validate_coordinates(value: str) -> tuple[int, int]:
     Raises:
         ValueError: If the format is invalid or cannot be converted.
     """
+    if not value:
+        raise ValueError("Coordinates cannot be empty")
     coordinates: list[str] = value.split(",")
     if len(coordinates) != 2:
         raise ValueError("Coordinates must be formated in x,y")
@@ -110,6 +116,8 @@ def validate_seed(value: str) -> int:
     Raises:
         ValueError: If the seed is not an integer.
     """
+    if not value:
+        raise ValueError("SEED cannot be empty")
     try:
         seed: int = int(value)
     except ValueError:
