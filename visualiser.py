@@ -1,11 +1,10 @@
 from mazegen import MazeGenerator
 
-
 WALL_COLORS = [
-    "\033[47m  \033[0m",  #white
-    "\033[43m  \033[0m",  #yellow
-    "\033[46m  \033[0m",  #cyan
-    "\033[45m  \033[0m",  #magenta
+    "\033[47m  \033[0m",  # white
+    "\033[43m  \033[0m",  # yellow
+    "\033[46m  \033[0m",  # cyan
+    "\033[45m  \033[0m",  # magenta
 ]
 
 
@@ -17,17 +16,20 @@ def build_path_set(maze: MazeGenerator) -> set[tuple[int, int]]:
         dx, dy = deltas[letter]
         for _ in range(2):
             fill = (fill[0] + dx, fill[1] + dy)
-            path_set.add(fill)    
+            path_set.add(fill)
     return path_set
 
 
-def render(maze: MazeGenerator, show_path: bool, path_set: set, wall_color: str) -> None:
+def render(
+    maze: MazeGenerator, show_path: bool, path_set: set, wall_color: str
+) -> None:
     w = 2 * maze.width + 1
     h = 2 * maze.height + 1
     color_black = "\033[40m  \033[0m"
     color_pink = "\033[48;2;255;105;180m  \033[0m"
     color_green = "\033[42m  \033[0m"
     color_blue = "\033[44m  \033[0m"
+    color_gray = "\033[100m  \033[0m"
     entry_rx = 2 * maze.entry[0] + 1
     entry_ry = 2 * maze.entry[1] + 1
     exit_rx = 2 * maze.exit[0] + 1
@@ -44,7 +46,8 @@ def render(maze: MazeGenerator, show_path: bool, path_set: set, wall_color: str)
             elif x % 2 == 0 and y % 2 == 0:
                 block = wall_color
             elif x % 2 == 1 and y % 2 == 1:
-                block = color_black
+                cell = maze.get_cell((x - 1) // 2, (y - 1) // 2)
+                block = color_gray if cell.blocked else color_black
             elif x == 0 or x == w - 1 or y == 0 or y == h - 1:
                 block = wall_color
             elif x % 2 == 1:
@@ -76,6 +79,7 @@ def run(maze: MazeGenerator) -> None:
             maze = MazeGenerator(
                 maze.width, maze.height, maze.entry, maze.exit, maze.perfect
             )
+            maze.add_42_pattern()
             maze.generate()
             path_set = build_path_set(maze)
         elif choice == "2":
