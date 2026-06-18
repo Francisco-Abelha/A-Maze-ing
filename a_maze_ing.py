@@ -28,7 +28,7 @@ def main() -> None:
         maze.generate()
         maze.write_output_file(output_file)
         run(maze, output_file)
-    except ValueError as e:
+    except (ValueError, KeyboardInterrupt) as e:
         print(f"Error: {e}")
         sys.exit(1)
 
