@@ -1,5 +1,16 @@
 import sys
 from typing import Callable, Any
+from typing import TypedDict, NotRequired
+
+
+class Config(TypedDict):
+    WIDTH: int
+    HEIGHT: int
+    ENTRY: tuple[int, int]
+    EXIT: tuple[int, int]
+    PERFECT: bool
+    OUTPUT_FILE: str
+    SEED: NotRequired[int]
 
 
 def validate_width(value: str) -> int:
@@ -16,7 +27,10 @@ def validate_width(value: str) -> int:
     """
     if not value:
         raise ValueError("WIDTH cannot be empty")
-    width: int = int(value)
+    try:
+        width: int = int(value)
+    except ValueError:
+        raise ValueError("WIDTH must be an integer")
 
     if width <= 0:
         raise ValueError("Width value must be greater than 0")
@@ -38,7 +52,10 @@ def validate_height(value: str) -> int:
     """
     if not value:
         raise ValueError("HEIGHT cannot be empty")
-    height: int = int(value)
+    try:
+        height: int = int(value)
+    except ValueError:
+        raise ValueError("HEIGHT must be an integer")
 
     if height <= 0:
         raise ValueError("Height value must be greater than 0")
@@ -63,9 +80,11 @@ def validate_coordinates(value: str) -> tuple[int, int]:
     coordinates: list[str] = value.split(",")
     if len(coordinates) != 2:
         raise ValueError("Coordinates must be formated in x,y")
-
-    x: int = int(coordinates[0])
-    y: int = int(coordinates[1])
+    try:
+        x: int = int(coordinates[0])
+        y: int = int(coordinates[1])
+    except ValueError:
+        raise ValueError("Coordinates must be integers")
 
     return (x, y)
 
@@ -125,7 +144,7 @@ def validate_seed(value: str) -> int:
     return seed
 
 
-def parser() -> dict:
+def parser() -> Config:
     """Read and validate the configuration file.
 
     Returns:
@@ -159,7 +178,7 @@ def parser() -> dict:
         "SEED": validate_seed,
     }
 
-    config: dict = {}
+    config: dict[str, Any] = {}
 
     try:
         with open(sys.argv[1], "r") as file:
@@ -189,4 +208,16 @@ def parser() -> dict:
     if missing_keys:
         raise ValueError(f"Missing keys: {missing_keys}")
 
-    return config
+    validated_config: Config = {
+        "WIDTH": config["WIDTH"],
+        "HEIGHT": config["HEIGHT"],
+        "ENTRY": config["ENTRY"],
+        "EXIT": config["EXIT"],
+        "OUTPUT_FILE": config["OUTPUT_FILE"],
+        "PERFECT": config["PERFECT"],
+    }
+
+    if "SEED" in config:
+        validated_config["SEED"] = config["SEED"]
+
+    return validated_config
