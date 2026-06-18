@@ -1,5 +1,5 @@
 from mazegen.mazegen import MazeGenerator
-from parser import parser
+from parser import parser, Config
 from visualiser import run
 import sys
 
@@ -12,7 +12,7 @@ def main() -> None:
     starts the terminal visualiser.
     """
     try:
-        config: dict = parser()
+        config: Config = parser()
         width = config["WIDTH"]
         height = config["HEIGHT"]
         maze_entry = config["ENTRY"]

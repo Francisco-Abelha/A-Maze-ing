@@ -29,7 +29,10 @@ def build_path_set(maze: MazeGenerator) -> set[tuple[int, int]]:
 
 
 def render(
-    maze: MazeGenerator, show_path: bool, path_set: set, wall_color: str
+    maze: MazeGenerator,
+    show_path: bool,
+    path_set: set[tuple[int, int]],
+    wall_color: str,
 ) -> None:
     """Render the maze in the terminal using ANSI colors.
 

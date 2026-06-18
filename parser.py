@@ -1,5 +1,16 @@
 import sys
 from typing import Callable, Any
+from typing import TypedDict, NotRequired
+
+
+class Config(TypedDict):
+    WIDTH: int
+    HEIGHT: int
+    ENTRY: tuple[int, int]
+    EXIT: tuple[int, int]
+    PERFECT: bool
+    OUTPUT_FILE: str
+    SEED: NotRequired[int]
 
 
 def validate_width(value: str) -> int:
@@ -133,7 +144,7 @@ def validate_seed(value: str) -> int:
     return seed
 
 
-def parser() -> dict:
+def parser() -> Config:
     """Read and validate the configuration file.
 
     Returns:
@@ -167,7 +178,7 @@ def parser() -> dict:
         "SEED": validate_seed,
     }
 
-    config: dict = {}
+    config: dict[str, Any] = {}
 
     try:
         with open(sys.argv[1], "r") as file:
@@ -197,4 +208,16 @@ def parser() -> dict:
     if missing_keys:
         raise ValueError(f"Missing keys: {missing_keys}")
 
-    return config
+    validated_config: Config = {
+        "WIDTH": config["WIDTH"],
+        "HEIGHT": config["HEIGHT"],
+        "ENTRY": config["ENTRY"],
+        "EXIT": config["EXIT"],
+        "OUTPUT_FILE": config["OUTPUT_FILE"],
+        "PERFECT": config["PERFECT"],
+    }
+
+    if "SEED" in config:
+        validated_config["SEED"] = config["SEED"]
+
+    return validated_config

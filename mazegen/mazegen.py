@@ -232,7 +232,9 @@ class MazeGenerator:
         queue = deque([self.entry])
 
         visited = {self.entry}
-        parents: dict = {self.entry: None}
+        parents: dict[tuple[int, int], tuple[int, int] | None] = {
+            self.entry: None
+        }
 
         while queue:
             current = queue.popleft()
@@ -247,15 +249,15 @@ class MazeGenerator:
                     parents[neighbor] = current
                     queue.append(neighbor)
 
-        path = []
-        current = self.exit
+        path: list[tuple[int, int]] = []
+        path_current: tuple[int, int] | None = self.exit
 
         if self.exit not in parents:
             raise ValueError("No path found between entry and exit")
 
-        while current is not None:
-            path.append(current)
-            current = parents[current]
+        while path_current is not None:
+            path.append(path_current)
+            path_current = parents[path_current]
 
         path.reverse()
         new_path: list[str] = []
