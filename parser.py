@@ -16,7 +16,10 @@ def validate_width(value: str) -> int:
     """
     if not value:
         raise ValueError("WIDTH cannot be empty")
-    width: int = int(value)
+    try:
+        width: int = int(value)
+    except ValueError:
+        raise ValueError("WIDTH must be an integer")
 
     if width <= 0:
         raise ValueError("Width value must be greater than 0")
@@ -38,7 +41,10 @@ def validate_height(value: str) -> int:
     """
     if not value:
         raise ValueError("HEIGHT cannot be empty")
-    height: int = int(value)
+    try:
+        height: int = int(value)
+    except ValueError:
+        raise ValueError("HEIGHT must be an integer")
 
     if height <= 0:
         raise ValueError("Height value must be greater than 0")
@@ -63,9 +69,11 @@ def validate_coordinates(value: str) -> tuple[int, int]:
     coordinates: list[str] = value.split(",")
     if len(coordinates) != 2:
         raise ValueError("Coordinates must be formated in x,y")
-
-    x: int = int(coordinates[0])
-    y: int = int(coordinates[1])
+    try:
+        x: int = int(coordinates[0])
+        y: int = int(coordinates[1])
+    except ValueError:
+        raise ValueError("Coordinates must be integers")
 
     return (x, y)
 
